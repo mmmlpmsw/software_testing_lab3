@@ -1,21 +1,16 @@
-package mmmlpmsw.testing.lab2
+package mmmlpmsw.testing.lab2.utilities
 
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD
 import org.junit.jupiter.api.fail
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
-
 import java.io.FileInputStream
 import java.util.*
 import java.util.stream.Stream
 
-@TestInstance(PER_METHOD)
-class Test {
+class DriversInitializer {
     companion object {
         private const val PROPERTIES_FILE = "src/main/test/resources/config.properties"
         lateinit var props: Properties
@@ -33,25 +28,25 @@ class Test {
             System.setProperty("webdriver.chrome.driver", props.getProperty("webdriver.chrome.driver"))
         }
 
+        @BeforeAll
         @JvmStatic
         fun provideWebDrivers(): Stream<WebDriver> {
             return Stream.of(
                     makeChromeDriver(),
-                    makeFirefoxDriver()
+//                    makeFirefoxDriver()
             )
         }
 
-        private fun makeChromeDriver()= ChromeDriver()
+        private fun makeChromeDriver(): ChromeDriver {
+            val opts = ChromeOptions()
+            opts.addArguments("user-agent=Chrome/89.0.4389.128")
+
+            return ChromeDriver(opts)
+        }
 
         private fun makeFirefoxDriver() = FirefoxDriver()
-    }
 
-    @ParameterizedTest
-    @MethodSource("provideWebDrivers")
-    fun dummyTest(driver: WebDriver) {
-        driver.get("https://google.com")
-        Thread.sleep(8000)
-        driver.quit()
+
+//        Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:87.0) Gecko/20100101 Firefox/87.0
     }
 }
-
