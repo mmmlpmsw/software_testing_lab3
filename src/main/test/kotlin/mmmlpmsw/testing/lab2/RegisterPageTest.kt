@@ -72,18 +72,18 @@ class RegisterPageTest {
         registerPage = RegisterPage(driver)
         Utils.clickAcceptCookies(driver)
 
+        registerPage.agree()
         registerPage.enterName("new_user_test")
         registerPage.enterEmail("new_user_email@register.com")
         registerPage.enterPassword("passworD123")
 
-        registerPage.agree()
-        registerPage.agree()
-
         Thread.sleep(90000) //todo captcha
 
         registerPage.clickRegister()
-//        Thread.sleep(2000) //todo wait
+        Thread.sleep(2000) //todo wait
         Assertions.assertTrue(registerPage.isRegistrationSuccedded())
+
+        driver.quit()
 
     }
 }

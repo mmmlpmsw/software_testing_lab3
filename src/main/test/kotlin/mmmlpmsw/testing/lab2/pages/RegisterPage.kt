@@ -13,7 +13,7 @@ class RegisterPage(private val driver: WebDriver) {
             throw IllegalArgumentException(driver.currentUrl)
     }
 
-    private val registrationSuccessPath = "//div[@class='grid--cell fs-body3 mb8']"
+    private val registrationSuccessPath = "//div[contains(@class,'grid--cell fs-body3 mb8')]"
 
     private val registerWithGoogleButtonPath = "//button[@data-provider='google' and @data-oauthserver='https://accounts.google.com/o/oauth2/auth']"
     private val registerWithGithubButtonPath = "//button[@data-provider='github' and @data-oauthserver='https://github.com/login/oauth/authorize']"

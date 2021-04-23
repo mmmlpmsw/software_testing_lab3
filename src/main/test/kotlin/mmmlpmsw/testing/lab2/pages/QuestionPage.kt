@@ -21,12 +21,13 @@ class QuestionPage(private val driver: WebDriver) {
     private val buttonPath = "//button[@type='submit']"
     private val emailErrorMsgPath = "//div[@class='message-text']"
     private val showMoreCommentsPath = "//div[@class='answer']//a[@title='Expand to show all comments on this post']"
-    private val addCommentPath = "//div[@class='answer']//a[contains(.,'Add a comment')]"
+//    private val addCommentPath = "//div[@class='answer']//a[contains(.,'Add a comment')]"
     private val addToBookmarksBtnPath = "//button[contains(@class, 'js-bookmark-btn')]"
     private val addToFollowingBtnPath = "//button[contains(@class, 'js-follow-post js-follow-question')]"
     private val myProfileLinkPath = "//a[contains(@class, 'my-profile')]"
+    private val shareLinkPath = "//a[@rel='nofollow' and @itemprop='url' and @class='js-share-link js-gps-track']"
+    private val shareLinkPopupPath = "//div[@class='s-popover z-dropdown s-anchors s-anchors__default is-visible']"
 
-//    <a class="js-show-link comments-link  dno" title="Expand to show all comments on this post" href="#" onclick="" role="button"></a>
     fun writeAnswerToQuestion(text: String) = driver.findElement(By.xpath(postAnswerTextareaPath)).sendKeys(text)
     fun isAnswerValid() =
         !driver.find(
@@ -61,5 +62,13 @@ class QuestionPage(private val driver: WebDriver) {
     fun addToBookmarks() = driver.findElement(By.xpath(addToBookmarksBtnPath)).click()
     fun addToFollowingQuestions() = driver.findElement(By.xpath(addToFollowingBtnPath)).click()
     fun openMyProfile() = driver.findElement(By.xpath(myProfileLinkPath)).click()
+
+    fun clickShareQuestion(): Boolean {
+        driver.findElement(By.xpath(shareLinkPath)).click()
+        return driver.find(By.xpath(shareLinkPopupPath)) &&
+                driver.findElement(By.xpath("$shareLinkPopupPath//input[@type='text']")).getAttribute("value").startsWith("https://stackoverflow.com/q/")
+
+
+    }
 
 }

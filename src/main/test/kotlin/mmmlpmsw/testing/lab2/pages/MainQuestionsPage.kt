@@ -1,9 +1,7 @@
 package mmmlpmsw.testing.lab2.pages
 
-import mmmlpmsw.testing.lab2.utilities.Utils
 import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -20,6 +18,7 @@ class MainQuestionsPage(private val driver: WebDriver) {
     private val usersPageLinkPath = "//a[@href='/users']"
     private val askQuestionButtonPath = "//a[@href='/questions/ask']"
     private val questionPath = "//div[@class='question-summary']/div[@class='summary']//a"
+    private val profileLinkPath = "//a[@class='my-profile js-gps-track' and @data-gps-track='profile_summary.click()']"
 
     fun search(value:String) {
         WebDriverWait(driver, 10).until { ExpectedConditions.elementToBeSelected(By.xpath(searchPath)) }
@@ -33,6 +32,8 @@ class MainQuestionsPage(private val driver: WebDriver) {
 
     fun clickToAskQuestion() = driver.findElement(By.xpath(askQuestionButtonPath)).click()
 
-    fun goToQuestion() = driver.findElement(By.xpath(questionPath)).click()
+    fun openQuestion() = driver.findElement(By.xpath(questionPath)).click()
+
+    fun openUserProfile() = driver.findElement(By.xpath(profileLinkPath)).click()
 
 }

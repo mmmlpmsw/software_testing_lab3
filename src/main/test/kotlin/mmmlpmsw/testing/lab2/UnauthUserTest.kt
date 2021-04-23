@@ -42,7 +42,7 @@ class UnauthUserTest {
         //fixme found element which appears after JS validation
         driver.get("https://stackoverflow.com/questions")
         val questionsPage = MainQuestionsPage(driver)
-        questionsPage.goToQuestion()
+        questionsPage.openQuestion()
 
         val questionPage = QuestionPage(driver)
         Utils.clickAcceptCookies(driver)
@@ -61,7 +61,7 @@ class UnauthUserTest {
         //fixme found element which appears after JS validation
         driver.get("https://stackoverflow.com/questions")
         val questionsPage = MainQuestionsPage(driver)
-        questionsPage.goToQuestion()
+        questionsPage.openQuestion()
 
         val questionPage = QuestionPage(driver)
         Utils.clickAcceptCookies(driver)

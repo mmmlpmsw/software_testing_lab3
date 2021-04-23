@@ -13,7 +13,6 @@ class LandingPage(private val driver: WebDriver) {
         if (!driver.currentUrl.equals(EXPECTED_PAGE_URL))
             throw IllegalArgumentException(driver.currentUrl)
     }
-    private val acceptAllCookiesElement = "//button[contains(@class, 'js-accept-cookies')]"
     private val searchContentLink = "//p/a[@href='/questions']"
     private val discoverTeamsContentLink = "//p/a[@href='https://stackoverflow.com/teams']"
     private val joinCommunityButton = "//a[@href='/users/signup']"
@@ -21,7 +20,6 @@ class LandingPage(private val driver: WebDriver) {
 
     fun clickSearchContentLink() = driver.findElement(By.xpath(searchContentLink)).click()
     fun clickDiscoverTeamsContentLink() = driver.findElement(By.xpath(discoverTeamsContentLink)).click()
-    fun clickAcceptCookies() = driver.findElement(By.xpath(acceptAllCookiesElement)).click()
     fun clickJoinCommunity() = driver.findElement(By.xpath(joinCommunityButton)).click()
     fun clickCreateTeam() = driver.findElement(By.xpath(createTeamLink)).click()
 }
