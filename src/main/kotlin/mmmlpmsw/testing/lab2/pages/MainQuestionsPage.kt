@@ -20,6 +20,7 @@ class MainQuestionsPage(private val driver: WebDriver) {
     private val questionPath = "//div[@class='question-summary']/div[@class='summary']//a"
     private val profileLinkPath = "//a[@class='my-profile js-gps-track' and @data-gps-track='profile_summary.click()']"
 
+
     fun search(value:String) {
         WebDriverWait(driver, 10).until { ExpectedConditions.elementToBeSelected(By.xpath(searchPath)) }
         driver.findElement(By.xpath(searchPath)).sendKeys(value)
@@ -35,5 +36,11 @@ class MainQuestionsPage(private val driver: WebDriver) {
     fun openQuestion() = driver.findElement(By.xpath(questionPath)).click()
 
     fun openUserProfile() = driver.findElement(By.xpath(profileLinkPath)).click()
+
+    fun logout() {
+        driver.findElement(By.xpath("//a[@href='https://stackexchange.com' and @data-gps-track='site_switcher.show']")).click()
+        driver.findElement(By.xpath("//a[@href='https://stackoverflow.com/users/logout']")).click()
+        driver.findElement(By.xpath("//form[@action='/users/logout']//button")).click()
+    }
 
 }

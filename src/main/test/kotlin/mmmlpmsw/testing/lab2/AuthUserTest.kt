@@ -238,6 +238,25 @@ class AuthUserTest {
         driver.quit()
     }
 
+    @ParameterizedTest
+    @MethodSource("provideWebDrivers")
+    fun logoutTest(driver: WebDriver) {
+        driver.get("https://stackoverflow.com/users/login")
+        loginPage = LoginPage(driver)
+        loginPage.login()
 
-    //todo logout
+        if (Utils.waitForCaptchaIfExists(driver)) {
+            driver.quit()
+            return
+        }
+
+        val mainPage = MainQuestionsPage(driver)
+        mainPage.logout()
+
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+
+        Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
+
+        driver.quit()
+    }
 }

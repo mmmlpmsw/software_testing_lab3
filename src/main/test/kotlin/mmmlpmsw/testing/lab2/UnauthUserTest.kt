@@ -23,22 +23,6 @@ class UnauthUserTest {
 
     @ParameterizedTest
     @MethodSource("provideWebDrivers")
-    fun testAskQuestion(driver: WebDriver) {
-        driver.get("https://stackoverflow.com/questions")
-        val questionsPage = MainQuestionsPage(driver)
-        questionsPage.clickToAskQuestion()
-
-        Assertions.assertTrue(driver.currentUrl.startsWith("https://stackoverflow.com/users/login?"))
-
-        val path = "//p[@class='val-textemphasis']"
-        Assertions.assertTrue(
-            driver.findElement(By.xpath(path)).text == "You must be logged in to ask a question on Stack Overflow"
-        )
-        driver.quit()
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideWebDrivers")
     fun testAnswerQuestion1(driver: WebDriver) {
         driver.get("https://stackoverflow.com/questions")
         val questionsPage = MainQuestionsPage(driver)
