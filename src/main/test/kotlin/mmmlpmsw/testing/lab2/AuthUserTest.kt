@@ -6,10 +6,12 @@ import mmmlpmsw.testing.lab2.utilities.Utils
 import mmmlpmsw.testing.lab2.utilities.find
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import java.util.concurrent.TimeUnit
 
 
 class AuthUserTest {
@@ -43,7 +45,7 @@ class AuthUserTest {
         mainQuestionsPage = MainQuestionsPage(driver)
 
         mainQuestionsPage.search("answers:518")
-
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         mainQuestionsPage.clickToLink("//a[contains(@href, '/questions/184618/what-is-the-best-comment-in-source-code-you-have-ever-encountered')]")
 
         questionPage = QuestionPage(driver)
@@ -70,6 +72,7 @@ class AuthUserTest {
         Utils.waitForCaptchaIfExists(driver)
 
         mainQuestionsPage.search("answers:518")
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         mainQuestionsPage.clickToLink("//a[contains(@href, '/questions/184618/what-is-the-best-comment-in-source-code-you-have-ever-encountered')]")
 
         questionPage = QuestionPage(driver)
@@ -97,6 +100,7 @@ class AuthUserTest {
         Utils.waitForCaptchaIfExists(driver)
 
         mainQuestionsPage.search("answers:518")
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
         mainQuestionsPage.clickToLink("//a[contains(@href, '/questions/184618/what-is-the-best-comment-in-source-code-you-have-ever-encountered')]")
 
         questionPage = QuestionPage(driver)
@@ -106,6 +110,7 @@ class AuthUserTest {
 
         userPage = CurrentUserPage(driver)
         userPage.openMyBookmarks()
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
 
         Assertions.assertTrue(driver.findElement(By.xpath(
             "//div[@class='user-questions']/div[contains(@class, 'question-summary')]//a[@class='question-hyperlink']"
@@ -117,6 +122,8 @@ class AuthUserTest {
         Assertions.assertFalse(driver.find(By.xpath(
             "//div[@class='user-questions']/div[contains(@class, 'question-summary')]//a[@class='question-hyperlink']"
         )))
+
+        driver.quit()
 
     }
 
@@ -137,6 +144,7 @@ class AuthUserTest {
         Utils.waitForCaptchaIfExists(driver)
 
         mainQuestionsPage.search("answers:107")
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         mainQuestionsPage.clickToLink("//a[contains(@href, '/questions/5767325/how-can-i-remove-a-specific-item-from-an-array')]")
 
         questionPage = QuestionPage(driver)
@@ -192,11 +200,11 @@ class AuthUserTest {
         editProfilePage.changeLocation("Saint Petersburg, Russia")
         editProfilePage.changeTitle("aaaaa")
 
-        Thread.sleep(2000) // todo wait
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         editProfilePage.saveChanges()
-        Thread.sleep(2000) // todo wait
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
 
-        Assertions.assertTrue(editProfilePage.isSuccess())
+        Assertions.assertTrue(editProfilePage.isDone())
 
         Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.locationInputPath)).getAttribute("value") == "Saint Petersburg, Russia")
         Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.titleInputPath)).getAttribute("value") == "aaaaa")
@@ -220,10 +228,11 @@ class AuthUserTest {
         Utils.waitForCaptchaIfExists(driver)
 
         mainQuestionsPage.search("answers:518")
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         mainQuestionsPage.clickToLink("//a[contains(@href, '/questions/184618/what-is-the-best-comment-in-source-code-you-have-ever-encountered')]")
 
         questionPage = QuestionPage(driver)
-
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         Assertions.assertTrue(questionPage.clickShareQuestion())
 
         driver.quit()

@@ -9,7 +9,7 @@ class CurrentUserPage(private val driver: WebDriver) {
 
     private val EXPECTED_PAGE_URL = "https://stackoverflow.com/users/"
     init {
-        WebDriverWait(driver, 10).until {
+        WebDriverWait(driver, 1000).until {
             (driver as JavascriptExecutor).executeScript("return document.readyState") == "complete" &&
                     driver.currentUrl.startsWith(EXPECTED_PAGE_URL)
         }

@@ -2,6 +2,7 @@ package mmmlpmsw.testing.lab2
 
 import mmmlpmsw.testing.lab2.pages.LandingPage
 import mmmlpmsw.testing.lab2.utilities.DriversInitializer
+import mmmlpmsw.testing.lab2.utilities.Utils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -27,6 +28,7 @@ class LandingPageTest {
     fun testOpenSearch(driver: WebDriver) {
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
+        Utils.clickAcceptCookies(driver)
         landingPage.clickSearchContentLink()
 
         assertEquals("https://stackoverflow.com/questions", driver.currentUrl)
@@ -49,6 +51,7 @@ class LandingPageTest {
     fun testPressJoinCommunity(driver: WebDriver) {
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
+        Utils.clickAcceptCookies(driver)
         landingPage.clickJoinCommunity()
 
         assertEquals("https://stackoverflow.com/users/signup", driver.currentUrl)

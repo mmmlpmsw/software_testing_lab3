@@ -32,7 +32,7 @@ class RegisterPageTest {
         registerPage.clickRegisterViaGoogleButton()
 
         Assertions.assertNotEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
-        Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/o/oauth2/auth/identifier?client_id"))
+        Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
 
         driver.quit()
     }
@@ -65,25 +65,25 @@ class RegisterPageTest {
         driver.quit()
     }
 
-    @ParameterizedTest
-    @MethodSource("provideWebDrivers")
-    fun testRegister(driver: WebDriver) {
-        driver.get("https://stackoverflow.com/users/signup")
-        registerPage = RegisterPage(driver)
-        Utils.clickAcceptCookies(driver)
-
-        registerPage.agree()
-        registerPage.enterName("new_user_test")
-        registerPage.enterEmail("new_user_email@register.com")
-        registerPage.enterPassword("passworD123")
-
-        Thread.sleep(90000) //todo captcha
-
-        registerPage.clickRegister()
-        Thread.sleep(2000) //todo wait
-        Assertions.assertTrue(registerPage.isRegistrationSuccedded())
-
-        driver.quit()
-
-    }
+//    @ParameterizedTest
+//    @MethodSource("provideWebDrivers")
+//    fun testRegister(driver: WebDriver) {
+//        driver.get("https://stackoverflow.com/users/signup")
+//        registerPage = RegisterPage(driver)
+//        Utils.clickAcceptCookies(driver)
+//
+//        registerPage.agree()
+//        registerPage.enterName("new_user_test")
+//        registerPage.enterEmail("new_user_email@register.com")
+//        registerPage.enterPassword("passworD123")
+//
+//        Thread.sleep(90000) //todo captcha
+//
+//        registerPage.clickRegister()
+//        Thread.sleep(2000) //todo wait
+//        Assertions.assertTrue(registerPage.isRegistrationSuccedded())
+//
+//        driver.quit()
+//
+//    }
 }

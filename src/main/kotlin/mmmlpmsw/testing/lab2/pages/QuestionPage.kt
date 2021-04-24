@@ -11,7 +11,7 @@ class QuestionPage(private val driver: WebDriver) {
     private val EXPECTED_PAGE_URL = "https://stackoverflow.com/questions/"
 
     init {
-        WebDriverWait(driver, 10).until {
+        WebDriverWait(driver, 1000).until {
             (driver as JavascriptExecutor).executeScript("return document.readyState") == "complete" &&
                     (driver.currentUrl.startsWith(EXPECTED_PAGE_URL))
         }
@@ -29,10 +29,11 @@ class QuestionPage(private val driver: WebDriver) {
     private val shareLinkPopupPath = "//div[@class='s-popover z-dropdown s-anchors s-anchors__default is-visible']"
 
     fun writeAnswerToQuestion(text: String) = driver.findElement(By.xpath(postAnswerTextareaPath)).sendKeys(text)
-    fun isAnswerValid() =
-        !driver.find(
+    fun isAnswerValid(): Boolean {
+        return !driver.find(
             By.xpath("//div[contains(@class, 'js-stacks-validation-message')]")
         )
+    }
 
     fun isEmailNotPresentedToPost(): Boolean {
         WebDriverWait(driver, 10).until {

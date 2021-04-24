@@ -3,7 +3,6 @@ package mmmlpmsw.testing.lab2.pages
 import mmmlpmsw.testing.lab2.utilities.find
 import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.WebDriverWait
 
@@ -39,6 +38,6 @@ class EditProfilePage(private val driver: WebDriver) {
 
     fun cancelChanges() = driver.findElement(By.xpath(cancelEditProfileBtnPath)).click()
 
-    fun isSuccess(): Boolean = driver.find(By.xpath(successFieldPath))
+    fun isDone(): Boolean = driver.find(By.xpath(successFieldPath)) || driver.find(By.xpath("//div[@class='form-error']"))
 
 }

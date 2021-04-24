@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.WebDriver
+import java.util.concurrent.TimeUnit
 
 
 class MainPageTest {
@@ -32,6 +33,7 @@ class MainPageTest {
         usersPage = UsersPage(driver)
         usersPage.clickAcceptCookies()
         usersPage.searchUser("josliber♦")
+        Thread.sleep(2000)
 
         Assertions.assertTrue(usersPage.isUserPresented("josliber"))
 

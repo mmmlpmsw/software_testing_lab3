@@ -87,7 +87,7 @@ class LoginPageTest {
         loginPage.clickLoginViaGoogleButton()
 
         Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
-        Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/o/oauth2/auth/identifier?client_id"))
+        Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
 
         driver.quit()
     }
@@ -100,7 +100,11 @@ class LoginPageTest {
         loginPage = LoginPage(driver)
         loginPage.clickAcceptCookies()
         loginPage.clickLoginViaGithubButton()
-        Utils.waitForCaptchaIfExists(driver)
+
+        if (Utils.waitForCaptchaIfExists(driver)) {
+            driver.quit()
+            return
+        }
 
         githubAuthPage = GithubAuthPage(driver)
         Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
@@ -117,9 +121,7 @@ class LoginPageTest {
         githubAuthPage.enterPassword(props.getProperty("github.password"))
 
         githubAuthPage.pressSignIn()
-        if (Utils.isCaptchaShown(driver)) {
-            Utils.waitForCaptchaIfExists(driver)
-            Assertions.assertTrue(driver.currentUrl.startsWith("https://stackoverflow.com/users/login"))
+        if (Utils.waitForCaptchaIfExists(driver)) {
             driver.quit()
             return
         }
@@ -134,6 +136,11 @@ class LoginPageTest {
         loginPage = LoginPage(driver)
         loginPage.clickAcceptCookies()
         loginPage.clickLoginViaFacebookButton()
+
+        if (Utils.waitForCaptchaIfExists(driver)) {
+            driver.quit()
+            return
+        }
 
         Assertions.assertTrue(driver.currentUrl.startsWith("https://www.facebook.com/login.php?"))
         driver.quit()

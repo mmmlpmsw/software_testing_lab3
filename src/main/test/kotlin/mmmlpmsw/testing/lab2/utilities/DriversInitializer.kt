@@ -34,8 +34,8 @@ class DriversInitializer {
         @JvmStatic
         fun provideWebDrivers(): Stream<WebDriver> {
             return Stream.of(
-                    makeChromeDriver(),
-//                    makeFirefoxDriver()
+//                    makeChromeDriver(),
+                    makeFirefoxDriver()
             )
         }
 
@@ -47,7 +47,10 @@ class DriversInitializer {
 //            return addAntiCookiePromptCookie(ChromeDriver(opts))
         }
 
-        private fun makeFirefoxDriver() = addAntiCookiePromptCookie(FirefoxDriver())
+        private fun makeFirefoxDriver(): FirefoxDriver {
+//            addAntiCookiePromptCookie(FirefoxDriver())
+            return FirefoxDriver()
+        }
 
         fun <T : WebDriver> addAntiCookiePromptCookie(driver: T): T {
             driver.get("https://stackoverflow.com")
