@@ -43,15 +43,18 @@ class QuestionPage(private val driver: WebDriver) {
     }
 
     fun clickToPostAnswer() {
-        if (driver.findElement(By.xpath(buttonPath)).text == " Post Your Answer ")
+        if (driver.findElement(By.xpath(buttonPath)).text == " Post Your Answer ") {
             driver.findElement(By.xpath(buttonPath)).click()
+        }
+
     }
 
     fun areErrorsPresented(): Boolean {
         WebDriverWait(driver, 10).until {
             driver.find(By.xpath("//div[contains(@class, 'js-general-error general-error')]"))
         }
-        return driver.find(By.xpath("//div[contains(@class, 'js-general-error general-error')]"))
+        return driver.find(By.xpath("//div[contains(@class, 'js-general-error general-error')]")) ||
+                driver.findElement(By.xpath("//div[@class='message-text']")).text == "To answer a question, you must either sign up for an account or post as a guest."
     }
 
     fun comment() {
@@ -59,6 +62,8 @@ class QuestionPage(private val driver: WebDriver) {
         Thread.sleep(2000)
         driver.findElement(By.linkText("Add a comment")).click()
     }
+
+    fun dismiss() = driver.findElement(By.xpath("//button[@title='Dismiss']")).click()
 
     fun addToBookmarks() = driver.findElement(By.xpath(addToBookmarksBtnPath)).click()
     fun addToFollowingQuestions() = driver.findElement(By.xpath(addToFollowingBtnPath)).click()

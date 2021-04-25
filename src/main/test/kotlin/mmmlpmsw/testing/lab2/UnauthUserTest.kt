@@ -38,24 +38,26 @@ class UnauthUserTest {
         driver.quit()
     }
 
-//    @ParameterizedTest
-//    @MethodSource("provideWebDrivers")
-//    fun testAnswerQuestion2(driver: WebDriver) {
-//        //fixme found element which appears after JS validation
-//        driver.get("https://stackoverflow.com/questions")
-//        val questionsPage = MainQuestionsPage(driver)
-//        questionsPage.openQuestion()
-//
-//        val questionPage = QuestionPage(driver)
-//        Utils.clickAcceptCookies(driver)
-//        questionPage.writeAnswerToQuestion("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-//        questionPage.clickToPostAnswer()
-//        Thread.sleep(2000)
-//
-//        Assertions.assertTrue(questionPage.isAnswerValid())
-//        Assertions.assertTrue(questionPage.areErrorsPresented())
-//        Assertions.assertTrue(questionPage.isEmailNotPresentedToPost())
-//
-//        driver.quit()
-//    }
+    @ParameterizedTest
+    @MethodSource("provideWebDrivers")
+    fun testAnswerQuestion2(driver: WebDriver) {
+
+        driver.get("https://stackoverflow.com/questions")
+        val questionsPage = MainQuestionsPage(driver)
+        questionsPage.openQuestion()
+
+        val questionPage = QuestionPage(driver)
+
+        Utils.clickAcceptCookiesIfPresent(driver)
+        questionPage.writeAnswerToQuestion("test test help me please aaaaaaaaaaaaaaaaaaaaaaa")
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+
+        questionPage.dismiss()
+        questionPage.clickToPostAnswer()
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+
+        Assertions.assertTrue(questionPage.areErrorsPresented() || questionPage.isEmailNotPresentedToPost())
+
+        driver.quit()
+    }
 }

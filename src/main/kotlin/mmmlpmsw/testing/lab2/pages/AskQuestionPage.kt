@@ -131,6 +131,3 @@ class AskQuestionPage(private val driver: WebDriver) {
     }
 
 }
-
-
-//private val title1 = "//div[contains(@class, 'text-counter')]" //Too long by /starts with || .. character left /contains
