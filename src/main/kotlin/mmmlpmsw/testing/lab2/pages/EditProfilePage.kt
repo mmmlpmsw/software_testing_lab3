@@ -36,7 +36,7 @@ class EditProfilePage(private val driver: WebDriver) {
     }
     fun saveChanges() = driver.findElement(By.xpath(saveProfileBtnPath)).click()
 
-    fun cancelChanges() = driver.findElement(By.xpath(cancelEditProfileBtnPath)).click()
+    fun cancelChanges() = driver.findElement(By.xpath(cancelEditProfileBtnPath)).click() //todo
 
     fun isDone(): Boolean = driver.find(By.xpath(successFieldPath)) || driver.find(By.xpath("//div[@class='form-error']"))
 

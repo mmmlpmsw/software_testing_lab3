@@ -57,7 +57,7 @@ class QuestionPage(private val driver: WebDriver) {
     fun comment() {
         driver.findElement(By.xpath(showMoreCommentsPath)).click()
         Thread.sleep(2000)
-        driver.findElement(By.linkText("Add a comment")).click() //fixme linkText -> xpath
+        driver.findElement(By.linkText("Add a comment")).click()
     }
 
     fun addToBookmarks() = driver.findElement(By.xpath(addToBookmarksBtnPath)).click()

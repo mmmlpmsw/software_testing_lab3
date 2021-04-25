@@ -25,10 +25,14 @@ class Utils {
             return false
         }
 
-        fun isCaptchaShown(driver: WebDriver): Boolean = driver.findElements(By.xpath("//iframe[@title='reCAPTCHA']")).size > 0
+        fun isCaptchaShown(driver: WebDriver) = driver.find(By.xpath("//iframe[@title='reCAPTCHA']"))
 
         private const val acceptAllCookiesElementPath = "//button[contains(@class, 'js-accept-cookies')]"
         fun clickAcceptCookies(driver: WebDriver) = driver.findElement(By.xpath(acceptAllCookiesElementPath)).click()
+
+        fun clickAcceptCookiesIfPresent(driver: WebDriver) {
+            if (driver.find(By.xpath(acceptAllCookiesElementPath))) driver.findElement(By.xpath(acceptAllCookiesElementPath)).click()
+        }
     }
 }
 

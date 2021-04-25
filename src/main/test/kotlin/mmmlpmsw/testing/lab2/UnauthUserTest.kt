@@ -29,7 +29,7 @@ class UnauthUserTest {
         questionsPage.openQuestion()
 
         val questionPage = QuestionPage(driver)
-//        Utils.clickAcceptCookies(driver)
+        Utils.clickAcceptCookiesIfPresent(driver)
         questionPage.writeAnswerToQuestion("aaaaaa")
         questionPage.clickToPostAnswer()
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
