@@ -25,7 +25,7 @@ class LoginPage(private val driver: WebDriver) {
 
     fun enterEmail(email: String) = driver.findElement(By.xpath(emailInputPath)).sendKeys(email)
     fun enterPassword(password: String) = driver.findElement(By.xpath(passwordInputPath)).sendKeys(password)
-    fun clickAcceptCookies() = driver.findElement(By.xpath(acceptAllCookiesElementPath)).click()
+    fun clickAcceptCookies() = 0 // do nothing // todo remove
     fun waitForUrl(url: String, timeout: Long) = WebDriverWait(driver, timeout).until { driver.currentUrl == url }
 
     fun clickLoginButton() = driver.findElement(By.xpath(loginButtonPath)).click()

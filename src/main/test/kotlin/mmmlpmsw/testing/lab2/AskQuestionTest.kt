@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import java.util.concurrent.TimeUnit
 
 class AskQuestionTest {
     companion object {
@@ -115,11 +116,10 @@ class AskQuestionTest {
 
         askQuestionPage.writeTitle("jfhueias`cnhaiaisudhrfiuawhgiuszawshaiuhdisuyhbfiusdfhegpHGAUYFSGjfhueias`cnhaiaisudhrfiuawhgiuszawshaiuhdisuyhbfiusdfhegpHGAUYFSGjfhueias`cnhaiaisudhrfiuawhgiuszawshaiuhdisuyhbfiusdfhegpHGAUYFSGjfhueias`cnhaiaisudhrfiuawhgiuszawshaiuhdisuyhbfiusdfhegpHGAUYFSGjfhueias`cnhaiaisudhrfiuawhgiuszawshaiuh")
         askQuestionPage.writeTagAndEnter("ojhilugyftdytufygiuhoijpokjihougiyfutdyrsydfgijnoidnvodufnvosdnvoaisnfcioncdjoiasjisohcfohihihvhvoudhvduofhoifhohfohfohfsodhfohfio")
-        Thread.sleep(2000) //todo
         askQuestionPage.writePost("a")
 
-        Assertions.assertTrue(askQuestionPage.isTitleLong())
-        Assertions.assertTrue(askQuestionPage.isTagLong())
+        Assertions.assertTrue(askQuestionPage.isTitleHavingError())
+        Assertions.assertTrue(askQuestionPage.isTagHavingError())
 
         driver.quit()
     }
