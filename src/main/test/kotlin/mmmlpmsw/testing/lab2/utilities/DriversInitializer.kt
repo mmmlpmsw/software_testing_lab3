@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import java.io.FileInputStream
 import java.time.Instant
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 
 class DriversInitializer {
@@ -34,8 +35,8 @@ class DriversInitializer {
         @JvmStatic
         fun provideWebDrivers(): Stream<WebDriver> {
             return Stream.of(
-//                    makeChromeDriver(),
-                    makeFirefoxDriver()
+                    makeChromeDriver(),
+//                    makeFirefoxDriver()
             )
         }
 
@@ -43,18 +44,17 @@ class DriversInitializer {
             val opts = ChromeOptions()
             opts.addArguments("user-agent=Chrome/89.0.4389.128")
 
-            return ChromeDriver(opts)
-//            return addAntiCookiePromptCookie(ChromeDriver(opts))
+            return prepareDriver(ChromeDriver(opts))
         }
 
         private fun makeFirefoxDriver(): FirefoxDriver {
-//            addAntiCookiePromptCookie(FirefoxDriver())
-            return FirefoxDriver()
+            return prepareDriver(FirefoxDriver())
         }
 
-        fun <T : WebDriver> addAntiCookiePromptCookie(driver: T): T {
+        fun <T : WebDriver> prepareDriver(driver: T): T {
             driver.get("https://stackoverflow.com")
             driver.manage().addCookie(Cookie("OptanonAlertBoxClosed", Instant.now().toString()))
+            driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS)
             return driver
         }
 

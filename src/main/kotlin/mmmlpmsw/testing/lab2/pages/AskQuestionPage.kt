@@ -102,10 +102,9 @@ class AskQuestionPage(private val driver: WebDriver) {
     fun isBodyShort() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text.startsWith("Body must be at least 30 characters;")} != null
     fun isTagAllowed() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text.contains("tag is not allowed.")} == null
 
-    fun isTitleLong() = driver.findElements(By.xpath("//div[contains(@class, 'text-counter')]")).find { it.text.startsWith("Too long by")} != null
-            || driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text == "Title cannot be longer than 150 characters."} != null
+    fun isTitleHavingError() = driver.findElements(By.xpath("//*[@id='post-title' and contains(@class, 'has-error')]")).size > 0
 
-    fun isTagLong() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text.contains("is too long; the maximum length is 35 characters.")} != null
+    fun isTagHavingError() = driver.findElements(By.xpath("//*[@id='tag-editor']//*[contains(@class, 'js-tag-editor-container') and contains(@class, 'has-error')]")).size > 0
 
     fun writeTagAndEnter(tag: String) {
         driver.findElement(By.xpath(inputTagPath)).clear()
