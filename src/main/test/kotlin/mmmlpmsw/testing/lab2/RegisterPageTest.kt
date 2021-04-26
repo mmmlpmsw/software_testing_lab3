@@ -2,13 +2,18 @@ package mmmlpmsw.testing.lab2
 
 import mmmlpmsw.testing.lab2.pages.GithubAuthPage
 import mmmlpmsw.testing.lab2.pages.RegisterPage
+import mmmlpmsw.testing.lab2.utilities.CaptchaAnalyzer
 import mmmlpmsw.testing.lab2.utilities.DriversInitializer
 import mmmlpmsw.testing.lab2.utilities.Utils
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.FluentWait
+import java.time.Duration
+
 
 class RegisterPageTest {
 
@@ -70,18 +75,23 @@ class RegisterPageTest {
     fun testRegister(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
-        Utils.clickAcceptCookies(driver)
 
         registerPage.agree()
         registerPage.enterName("new_user_test")
         registerPage.enterEmail("new_user_email@register.com")
         registerPage.enterPassword("passworD123")
 
-        Thread.sleep(90000) //todo captcha
+        FluentWait(driver)
+            .pollingEvery(Duration.ofSeconds(2))
+            .withTimeout(Duration.ofMinutes(10))
+            .until {
+                CaptchaAnalyzer.isCaptchaSolved(
+                    driver, registerPage.getCaptchaElement()
+                )
+            }
 
         registerPage.clickRegister()
-        Thread.sleep(2000) //todo wait
-        Assertions.assertTrue(registerPage.isRegistrationSuccedded())
+        Assertions.assertTrue(registerPage.isRegistrationSucceeded())
 
         driver.quit()
 
