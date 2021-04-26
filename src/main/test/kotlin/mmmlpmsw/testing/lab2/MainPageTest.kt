@@ -32,8 +32,7 @@ class MainPageTest {
 
         usersPage = UsersPage(driver)
         usersPage.clickAcceptCookies()
-        usersPage.searchUser("josliber♦")
-        Thread.sleep(2000) //todo
+        usersPage.searchUser("josliber")
 
         Assertions.assertTrue(usersPage.isUserPresented("josliber"))
 

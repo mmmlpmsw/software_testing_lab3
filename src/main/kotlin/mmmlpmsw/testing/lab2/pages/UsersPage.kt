@@ -21,7 +21,7 @@ class UsersPage(private val driver: WebDriver) {
 
 
 
-    fun clickAcceptCookies() = driver.findElement(By.xpath(acceptAllCookiesElement)).click()
+    fun clickAcceptCookies() = 0 // do nothing // todo remove
 
     fun searchUser(value:String) {
         driver.findElement(By.xpath(searchUserPath)).sendKeys(value)
@@ -29,7 +29,6 @@ class UsersPage(private val driver: WebDriver) {
     }
 
     fun isUserPresented(name: String):Boolean {
-        println(driver.findElement(By.xpath(userInfoPath)).text)
-        return driver.findElement(By.xpath(userInfoPath)).text == name
+        return driver.findElements(By.xpath("//div[@id='user-browser']//div[@class='user-details']/a[text() = '$name']")).size > 0
     }
 }
