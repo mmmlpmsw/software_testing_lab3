@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
     <groupId>mmmlpmsw</groupId>
-    <artifactId>testing-lab2</artifactId>
+    <artifactId>testing-lab3</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
