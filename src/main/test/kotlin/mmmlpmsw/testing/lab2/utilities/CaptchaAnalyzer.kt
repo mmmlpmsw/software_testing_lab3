@@ -28,10 +28,10 @@ class CaptchaAnalyzer {
                 val r = it.value[0].value
                 val g = it.value[1].value
                 val b = it.value[2].value
-                r < 45 && g > 150 && b < 95
+                r < 100 && g > 150 && b < 95
             }.count()
             println("Found $greenPixels green pixels")
-            return greenPixels > 0.0004*rawRgba.size
+            return greenPixels > 0.0002*rawRgba.size
         }
     }
 }
