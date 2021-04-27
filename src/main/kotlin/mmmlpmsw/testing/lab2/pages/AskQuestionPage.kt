@@ -59,7 +59,10 @@ class AskQuestionPage(private val driver: WebDriver) {
     }
     fun removeLink() = driver.findElement(By.xpath(linkBtnPath)).click()
 
-    fun clickQuote() = driver.findElement(By.xpath(quoteBtnPath)).click()
+    fun clickQuote() {
+        driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS)
+        driver.findElement(By.xpath(quoteBtnPath)).click()
+    }
 
     fun clickCode() = driver.findElement(By.xpath(codeBtnPath)).click()
     fun clickImage() = driver.findElement(By.xpath(imageBtnPath)).click()
@@ -101,11 +104,10 @@ class AskQuestionPage(private val driver: WebDriver) {
 
     fun isTitlePresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and text() = 'Title is missing.']")) == null
     fun isPostPresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and text() = 'Body is missing.']")) == null
-    fun isTagPresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and text() = 'Please enter at least one tag; see a list of popular tags.']")) == null
+    fun isTagPresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and contains(text(), 'Please enter at least one tag;')]")) == null
 
-    fun isTitleShort() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text == "Title must be at least 15 characters."} != null
-    fun isBodyShort() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text.startsWith("Body must be at least 30 characters;")} != null
-    fun isTagAllowed() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text.contains("tag is not allowed.")} == null
+    fun isTitleShort() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and contains(text(), 'Title must be at least 15 characters.')]")) != null
+    fun isBodyShort() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and contains(text(), 'Body must be at least 30 characters;')]")) != null
 
     fun isTitleHavingError() = driver.findElements(By.xpath("//*[@id='post-title' and contains(@class, 'has-error')]")).size > 0
 
@@ -121,14 +123,9 @@ class AskQuestionPage(private val driver: WebDriver) {
         (driver as JavascriptExecutor).executeScript("arguments[0].setSelectionRange($from,$to)", driver.findElement(By.xpath(inputPostPath)))
     }
 
-    fun postQuestion() {
-        driver.findElement(By.xpath("//button[@type='submit' and contains(@class, 'js-submit-button')]")).click()
-//        Thread.sleep(2000) //todo
-    }
-    fun reviewQuestion() {
-        driver.findElement(By.xpath("//button[@type='button' and @data-gps-track='askpage.review_click']")).click()
-//        Thread.sleep(2000) //todo
-    }
+    fun postQuestion() = driver.findElement(By.xpath("//button[@type='submit' and contains(@class, 'js-submit-button')]")).click()
+    fun reviewQuestion() = driver.findElement(By.xpath("//button[@type='button' and @data-gps-track='askpage.review_click']")).click()
+
 
     fun aaa() {
         println(driver.findElement(By.xpath(previewPath)).getAttribute("innerHTML"))

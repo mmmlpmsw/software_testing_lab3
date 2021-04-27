@@ -11,8 +11,13 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
+import java.time.Duration
 import java.util.concurrent.TimeUnit
+
 
 class AskQuestionTest {
     companion object {
@@ -86,15 +91,12 @@ class AskQuestionTest {
         askQuestionPage.writeTag("a")
 
         askQuestionPage.reviewQuestion()
-        askQuestionPage.postQuestion()
-
-        Assertions.assertTrue(askQuestionPage.isTitlePresented())
-        Assertions.assertTrue(askQuestionPage.isPostPresented())
-        Assertions.assertTrue(askQuestionPage.isTagPresented())
 
         Assertions.assertTrue(askQuestionPage.isTitleShort())
+        Assertions.assertTrue(askQuestionPage.isTagHavingError())
+
+        askQuestionPage.postQuestion()
         Assertions.assertTrue(askQuestionPage.isBodyShort())
-        Assertions.assertFalse(askQuestionPage.isTagAllowed())
 
         driver.quit()
     }
@@ -388,7 +390,12 @@ class AskQuestionTest {
         askQuestionPage.writePost("a\nb")
 
         askQuestionPage.highlightText(0, 1)
+
+        val currentHTML = askQuestionPage.getPreview()
+
         askQuestionPage.clickNumberedList()
+
+        WebDriverWait(driver, 10).pollingEvery(Duration.ofMillis(100)).until { currentHTML != askQuestionPage.getPreview() }
 
         Assertions.assertEquals(
             "<ol>\n" +
@@ -428,7 +435,12 @@ class AskQuestionTest {
         askQuestionPage.writePost("a\nb")
 
         askQuestionPage.highlightText(0, 1)
+        val currentHTML = askQuestionPage.getPreview()
+
         askQuestionPage.clickBulletedList()
+
+        WebDriverWait(driver, 10).pollingEvery(Duration.ofMillis(100)).until { currentHTML != askQuestionPage.getPreview() }
+
         Assertions.assertEquals(
             "<ul>\n" +
                     "<li>a</li>\n" +
@@ -467,7 +479,12 @@ class AskQuestionTest {
         askQuestionPage.writePost("Lorem\nipsum")
 
         askQuestionPage.highlightText(0, 5)
+        var currentHTML = askQuestionPage.getPreview()
+
         askQuestionPage.clickHeading()
+
+        WebDriverWait(driver, 10).pollingEvery(Duration.ofMillis(100)).until { currentHTML != askQuestionPage.getPreview() }
+
         Assertions.assertEquals(
             "<h2>Lorem</h2>\n" +
                     "<p>ipsum</p>\n",
@@ -475,7 +492,12 @@ class AskQuestionTest {
         )
 
         askQuestionPage.highlightText(0, 5)
+        currentHTML = askQuestionPage.getPreview()
+
         askQuestionPage.clickHeading()
+
+        WebDriverWait(driver, 10).pollingEvery(Duration.ofMillis(100)).until { currentHTML != askQuestionPage.getPreview() }
+
         Assertions.assertEquals(
             "<h1>Lorem</h1>\n" +
                     "<p>ipsum</p>\n",
@@ -512,7 +534,13 @@ class AskQuestionTest {
         askQuestionPage.writePost("Lorem\nipsum")
 
         askQuestionPage.highlightText(6, 6)
+        var currentHTML = askQuestionPage.getPreview()
+
         askQuestionPage.clickHorizontal()
+
+        WebDriverWait(driver, 10).pollingEvery(Duration.ofMillis(100)).until { currentHTML != askQuestionPage.getPreview() }
+
+
         Assertions.assertEquals(
             "<p>Lorem</p>\n" +
                     "<hr>\n" +
@@ -521,35 +549,5 @@ class AskQuestionTest {
         )
 
         driver.quit()
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideWebDrivers")
-    fun authorizedUserAskQuestionTest(driver: WebDriver) {
-        driver.get("https://stackoverflow.com/users/login")
-        val loginPage = LoginPage(driver)
-        loginPage.login()
-        if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
-            return
-        }
-        driver.get("https://stackoverflow.com/questions")
-        val questionsPage = MainQuestionsPage(driver)
-        questionsPage.clickToAskQuestion()
-        val askQuestionPage = AskQuestionPage(driver)
-
-        askQuestionPage.writePost("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
-                " ut labore et dolore magna aliqua.")
-
-
-
-
-
-
-
-
-
-        driver.quit()
-
     }
 }
