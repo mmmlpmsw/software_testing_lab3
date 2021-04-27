@@ -31,7 +31,6 @@ class MainPageTest {
         mainPage.clickUsersPageLink()
 
         usersPage = UsersPage(driver)
-        usersPage.clickAcceptCookies()
         usersPage.searchUser("josliber")
 
         Assertions.assertTrue(usersPage.isUserPresented("josliber"))

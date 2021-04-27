@@ -34,7 +34,6 @@ class RegisterPageTest {
     fun testRegisterViaGoogle(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
-        Utils.clickAcceptCookies(driver)
         registerPage.clickRegisterViaGoogleButton()
 
         Assertions.assertNotEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
@@ -48,7 +47,6 @@ class RegisterPageTest {
     fun testRegisterViaGithub(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
-        Utils.clickAcceptCookies(driver)
         registerPage.clickRegisterViaGithubButton()
         Utils.waitForCaptchaIfExists(driver)
 
@@ -64,7 +62,6 @@ class RegisterPageTest {
     fun testRegisterViaFacebook(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
-        Utils.clickAcceptCookies(driver)
         registerPage.clickRegisterViaFacebookButton()
 
         Assertions.assertTrue(driver.currentUrl.startsWith("https://www.facebook.com/login.php?"))

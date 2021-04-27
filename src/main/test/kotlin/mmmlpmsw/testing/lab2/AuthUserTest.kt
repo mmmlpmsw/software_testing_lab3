@@ -209,6 +209,7 @@ class AuthUserTest {
         Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.locationInputPath)).getAttribute("value") == "Saint Petersburg, Russia")
         Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.titleInputPath)).getAttribute("value") == "aaaaa")
 
+        driver.quit()
     }
 
     @ParameterizedTest

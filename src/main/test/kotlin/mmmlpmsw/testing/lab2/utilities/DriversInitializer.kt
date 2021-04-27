@@ -36,7 +36,7 @@ class DriversInitializer {
         fun provideWebDrivers(): Stream<WebDriver> {
             return Stream.of(
                     makeChromeDriver(),
-//                    makeFirefoxDriver()
+                    makeFirefoxDriver()
             )
         }
 

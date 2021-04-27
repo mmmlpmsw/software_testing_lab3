@@ -28,7 +28,6 @@ class LandingPageTest {
     fun testOpenSearch(driver: WebDriver) {
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
-        Utils.clickAcceptCookies(driver)
         landingPage.clickSearchContentLink()
 
         assertEquals("https://stackoverflow.com/questions", driver.currentUrl)
@@ -51,7 +50,6 @@ class LandingPageTest {
     fun testPressJoinCommunity(driver: WebDriver) {
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
-        Utils.clickAcceptCookies(driver)
         landingPage.clickJoinCommunity()
 
         assertEquals("https://stackoverflow.com/users/signup", driver.currentUrl)

@@ -31,7 +31,6 @@ class LoginPageTest {
     fun testLoginWithWrongEmail(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-        loginPage.clickAcceptCookies()
         loginPage.enterEmail("aaaaaaaa")
         loginPage.enterPassword("aaaaaaaa")
 
@@ -46,7 +45,6 @@ class LoginPageTest {
     fun testLoginWithWrongPassword(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-        loginPage.clickAcceptCookies()
         loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
         loginPage.enterPassword("help me please aaaaaaaaa")
 
@@ -61,7 +59,6 @@ class LoginPageTest {
     fun testLoginViaEmail(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-        loginPage.clickAcceptCookies()
         loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
         loginPage.enterPassword("qwerty123")
         loginPage.clickLoginButton()
@@ -83,8 +80,12 @@ class LoginPageTest {
     fun testLoginViaGoogle(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-        loginPage.clickAcceptCookies()
         loginPage.clickLoginViaGoogleButton()
+
+        if (Utils.waitForCaptchaIfExists(driver)) {
+            driver.quit()
+            return
+        }
 
         Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
         Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
@@ -98,7 +99,7 @@ class LoginPageTest {
     fun testLoginViaGithub(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-        loginPage.clickAcceptCookies()
+//        loginPage.clickAcceptCookies()
         loginPage.clickLoginViaGithubButton()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
@@ -134,7 +135,6 @@ class LoginPageTest {
     fun testLoginViaFacebook(driver: WebDriver) {
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-        loginPage.clickAcceptCookies()
         loginPage.clickLoginViaFacebookButton()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
