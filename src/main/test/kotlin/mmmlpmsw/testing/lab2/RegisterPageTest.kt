@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
+import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.FluentWait
 import java.time.Duration
@@ -84,6 +85,7 @@ class RegisterPageTest {
         FluentWait(driver)
             .pollingEvery(Duration.ofSeconds(2))
             .withTimeout(Duration.ofMinutes(10))
+            .ignoring(StaleElementReferenceException::class.java)
             .until {
                 !registerPage.isCaptchaWindowShowed()
                 CaptchaAnalyzer.isCaptchaSolved(
