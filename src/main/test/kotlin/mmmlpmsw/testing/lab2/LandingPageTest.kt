@@ -1,69 +1,63 @@
 package mmmlpmsw.testing.lab2
 
 import mmmlpmsw.testing.lab2.pages.LandingPage
-import mmmlpmsw.testing.lab2.utilities.DriversInitializer
-import mmmlpmsw.testing.lab2.utilities.Utils
+import mmmlpmsw.testing.lab2.utilities.ProvideWebDrivers
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
-import org.openqa.selenium.Cookie
 import org.openqa.selenium.WebDriver
-import java.time.Instant
 
 class LandingPageTest {
-
-    companion object {
-        @BeforeAll
-        @JvmStatic
-        fun init() = DriversInitializer.initEverything()
-        @JvmStatic
-        fun provideWebDrivers() = DriversInitializer.provideWebDrivers()
-    }
+    private lateinit var driver: WebDriver
 
     private lateinit var landingPage: LandingPage
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testOpenSearch(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
         landingPage.clickSearchContentLink()
 
         assertEquals("https://stackoverflow.com/questions", driver.currentUrl)
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testOpenDiscoverTeams(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
         landingPage.clickDiscoverTeamsContentLink()
 
         assertEquals("https://stackoverflow.com/teams", driver.currentUrl)
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testPressJoinCommunity(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
         landingPage.clickJoinCommunity()
 
         assertEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testPressCreateTeam(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com")
         landingPage = LandingPage(driver)
         landingPage.clickCreateTeam()
 
         assertEquals("https://stackoverflow.com/teams/create/free", driver.currentUrl)
+    }
+
+    @AfterEach
+    fun tearDown() {
         driver.quit()
     }
 }

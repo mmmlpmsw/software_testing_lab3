@@ -14,7 +14,6 @@ class LoginPage(private val driver: WebDriver) {
     }
     private val emailInputPath = "//input[@type='email']"
     private val passwordInputPath = "//input[@type='password']"
-    private val acceptAllCookiesElementPath = "//button[contains(@class, 'js-accept-cookies')]"
     private val loginButtonPath = "//button[@name='submit-button']"
 
     private val errorMsgPath = "//p[contains(@class, 'js-error-message')]"
@@ -25,7 +24,6 @@ class LoginPage(private val driver: WebDriver) {
 
     fun enterEmail(email: String) = driver.findElement(By.xpath(emailInputPath)).sendKeys(email)
     fun enterPassword(password: String) = driver.findElement(By.xpath(passwordInputPath)).sendKeys(password)
-    fun clickAcceptCookies() = 0 // do nothing // todo remove
     fun waitForUrl(url: String, timeout: Long) = WebDriverWait(driver, timeout).until { driver.currentUrl == url }
 
     fun clickLoginButton() = driver.findElement(By.xpath(loginButtonPath)).click()
@@ -36,7 +34,6 @@ class LoginPage(private val driver: WebDriver) {
     fun clickLoginViaFacebookButton() = driver.findElement(By.xpath(loginWithFacebookButtonPath)).click()
 
     fun login(email: String = "eevjaqmrffdlulceoi@niwghx.com", password: String = "qwerty123") {
-        clickAcceptCookies()
         enterEmail(email)
         enterPassword(password)
         clickLoginButton()

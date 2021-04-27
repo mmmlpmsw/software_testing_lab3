@@ -1,28 +1,19 @@
 package mmmlpmsw.testing.lab2
 
 import mmmlpmsw.testing.lab2.pages.*
-import mmmlpmsw.testing.lab2.utilities.DriversInitializer
+import mmmlpmsw.testing.lab2.utilities.ProvideWebDrivers
 import mmmlpmsw.testing.lab2.utilities.Utils
 import mmmlpmsw.testing.lab2.utilities.find
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import java.util.concurrent.TimeUnit
 
 
 class AuthUserTest {
-    companion object {
-        @BeforeAll
-        @JvmStatic
-        fun init() = DriversInitializer.initEverything()
-
-        @JvmStatic
-        fun provideWebDrivers() = DriversInitializer.provideWebDrivers()
-    }
+    private lateinit var driver: WebDriver
 
     private lateinit var loginPage: LoginPage
     private lateinit var mainQuestionsPage: MainQuestionsPage
@@ -31,14 +22,14 @@ class AuthUserTest {
     private lateinit var editProfilePage: EditProfilePage
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun searchQuestionTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -52,18 +43,17 @@ class AuthUserTest {
         val path = "//div[@itemprop='mainEntity']//a[contains(@class, 'question-hyperlink')]"
         Assertions.assertTrue(driver.findElement(By.xpath(path)).text == "What is the best comment in source code you have ever encountered? [closed]")
 
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun leaveCommentTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -80,18 +70,17 @@ class AuthUserTest {
 
         Assertions.assertTrue(driver.find(By.xpath("//div[@class='message-text' and .//a[@href='/help/privileges/comment']]")))
 
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun bookmarksTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -123,19 +112,18 @@ class AuthUserTest {
             "//div[@class='user-questions']/div[contains(@class, 'question-summary')]//a[@class='question-hyperlink']"
         )))
 
-        driver.quit()
 
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun followQuestionTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -166,27 +154,25 @@ class AuthUserTest {
             "//div[@class='user-questions']/div[contains(@class, 'js-followed-post')]//a[@class='question-hyperlink']"
         )))
 
-        driver.quit()
 
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun editProfileTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
 
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
         mainQuestionsPage = MainQuestionsPage(driver)
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -209,18 +195,17 @@ class AuthUserTest {
         Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.locationInputPath)).getAttribute("value") == "Saint Petersburg, Russia")
         Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.titleInputPath)).getAttribute("value") == "aaaaa")
 
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun shareQuestionTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -236,18 +221,17 @@ class AuthUserTest {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
         Assertions.assertTrue(questionPage.clickShareQuestion())
 
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun logoutTest(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.login()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -258,6 +242,10 @@ class AuthUserTest {
 
         Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
 
+    }
+
+    @AfterEach
+    fun tearDown() {
         driver.quit()
     }
 }

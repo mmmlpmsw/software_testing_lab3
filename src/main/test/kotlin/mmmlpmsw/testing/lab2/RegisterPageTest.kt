@@ -3,13 +3,11 @@ package mmmlpmsw.testing.lab2
 import mmmlpmsw.testing.lab2.pages.GithubAuthPage
 import mmmlpmsw.testing.lab2.pages.RegisterPage
 import mmmlpmsw.testing.lab2.utilities.CaptchaAnalyzer
-import mmmlpmsw.testing.lab2.utilities.DriversInitializer
+import mmmlpmsw.testing.lab2.utilities.ProvideWebDrivers
 import mmmlpmsw.testing.lab2.utilities.Utils
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
-import org.openqa.selenium.By
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.FluentWait
@@ -17,21 +15,15 @@ import java.time.Duration
 
 
 class RegisterPageTest {
-
-    companion object {
-        @BeforeAll
-        @JvmStatic
-        fun init() = DriversInitializer.initEverything()
-        @JvmStatic
-        fun provideWebDrivers() = DriversInitializer.provideWebDrivers()
-    }
+    private lateinit var driver: WebDriver
 
     private lateinit var registerPage: RegisterPage
     private lateinit var githubAuthPage: GithubAuthPage
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testRegisterViaGoogle(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
         registerPage.clickRegisterViaGoogleButton()
@@ -39,12 +31,12 @@ class RegisterPageTest {
         Assertions.assertNotEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
         Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
 
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testRegisterViaGithub(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
         registerPage.clickRegisterViaGithubButton()
@@ -54,23 +46,23 @@ class RegisterPageTest {
         Assertions.assertNotEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
         Assertions.assertTrue(driver.currentUrl.startsWith("https://github.com/login"))
 
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testRegisterViaFacebook(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
         registerPage.clickRegisterViaFacebookButton()
 
         Assertions.assertTrue(driver.currentUrl.startsWith("https://www.facebook.com/login.php?"))
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testRegister(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/signup")
         registerPage = RegisterPage(driver)
 
@@ -93,7 +85,10 @@ class RegisterPageTest {
         registerPage.clickRegister()
         Assertions.assertTrue(registerPage.isRegistrationSucceeded())
 
-        driver.quit()
+    }
 
+    @AfterEach
+    fun tearDown() {
+        driver.quit()
     }
 }

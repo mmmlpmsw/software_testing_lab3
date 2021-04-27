@@ -2,33 +2,27 @@ package mmmlpmsw.testing.lab2
 
 import mmmlpmsw.testing.lab2.pages.GithubAuthPage
 import mmmlpmsw.testing.lab2.pages.LoginPage
-import mmmlpmsw.testing.lab2.utilities.DriversInitializer
+import mmmlpmsw.testing.lab2.utilities.ProvideWebDrivers
 import mmmlpmsw.testing.lab2.utilities.Utils
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.fail
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.WebDriver
 import java.io.FileInputStream
 import java.util.*
 
 
 class LoginPageTest {
-    companion object {
-        @BeforeAll
-        @JvmStatic
-        fun init() = DriversInitializer.initEverything()
-        @JvmStatic
-        fun provideWebDrivers() = DriversInitializer.provideWebDrivers()
-    }
+    private lateinit var driver: WebDriver
 
     private lateinit var loginPage: LoginPage
     private lateinit var githubAuthPage: GithubAuthPage
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testLoginWithWrongEmail(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.enterEmail("aaaaaaaa")
@@ -37,12 +31,12 @@ class LoginPageTest {
         loginPage.clickLoginButton()
 
         Assertions.assertTrue(loginPage.isErrorAppear())
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testLoginWithWrongPassword(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
@@ -51,12 +45,12 @@ class LoginPageTest {
         loginPage.clickLoginButton()
 
         Assertions.assertTrue(loginPage.isErrorAppear())
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testLoginViaEmail(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
@@ -65,45 +59,41 @@ class LoginPageTest {
 
         if (Utils.waitForCaptchaIfExists(driver)) {
             Assertions.assertNotEquals("https://stackoverflow.com/", driver.currentUrl)
-            driver.quit()
             return
         }
 
         loginPage.waitForUrl("https://stackoverflow.com/", 1)
         Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
-        driver.quit()
     }
 
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testLoginViaGoogle(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.clickLoginViaGoogleButton()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
         Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
         Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
 
-        driver.quit()
     }
 
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testLoginViaGithub(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
-//        loginPage.clickAcceptCookies()
         loginPage.clickLoginViaGithubButton()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
@@ -123,26 +113,28 @@ class LoginPageTest {
 
         githubAuthPage.pressSignIn()
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
         Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
-        driver.quit()
     }
 
     @ParameterizedTest
-    @MethodSource("provideWebDrivers")
+    @ProvideWebDrivers
     fun testLoginViaFacebook(driver: WebDriver) {
+        this.driver = driver
         driver.get("https://stackoverflow.com/users/login")
         loginPage = LoginPage(driver)
         loginPage.clickLoginViaFacebookButton()
 
         if (Utils.waitForCaptchaIfExists(driver)) {
-            driver.quit()
             return
         }
 
         Assertions.assertTrue(driver.currentUrl.startsWith("https://www.facebook.com/login.php?"))
+    }
+
+    @AfterEach
+    fun tearDown() {
         driver.quit()
     }
 }
