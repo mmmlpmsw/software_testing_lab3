@@ -88,15 +88,20 @@ class AskQuestionPage(private val driver: WebDriver) {
     }
 
     fun writeTag(tag: String) {
+        driver.findElement(By.xpath(inputTagPath)).sendKeys(Keys.BACK_SPACE)
+        driver.findElement(By.xpath(inputTagPath)).sendKeys(Keys.CONTROL)
+        driver.findElement(By.xpath(inputTagPath)).sendKeys("a")
+        driver.findElement(By.xpath(inputTagPath)).sendKeys(Keys.BACK_SPACE)
+
         driver.findElement(By.xpath(inputTagPath)).clear()
         driver.findElement(By.xpath(inputTagPath)).sendKeys(tag)
     }
 
     fun getPreview(): String = driver.findElement(By.xpath(previewPath)).getAttribute("innerHTML")
 
-    fun isTitlePresented() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text == "Title is missing."} == null
-    fun isPostPresented() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text == "Body is missing."} == null
-    fun isTagPresented() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text == "Please enter at least one tag; see a list of popular tags."} == null
+    fun isTitlePresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and text() = 'Title is missing.']")) == null
+    fun isPostPresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and text() = 'Body is missing.']")) == null
+    fun isTagPresented() = driver.findElement(By.xpath("//div[contains(@class, 'js-stacks-validation-message') and text() = 'Please enter at least one tag; see a list of popular tags.']")) == null
 
     fun isTitleShort() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text == "Title must be at least 15 characters."} != null
     fun isBodyShort() = driver.findElements(By.xpath(inputErrorMsgPath)).find { it.text.startsWith("Body must be at least 30 characters;")} != null
@@ -118,11 +123,11 @@ class AskQuestionPage(private val driver: WebDriver) {
 
     fun postQuestion() {
         driver.findElement(By.xpath("//button[@type='submit' and contains(@class, 'js-submit-button')]")).click()
-        Thread.sleep(2000) //todo
+//        Thread.sleep(2000) //todo
     }
     fun reviewQuestion() {
         driver.findElement(By.xpath("//button[@type='button' and @data-gps-track='askpage.review_click']")).click()
-        Thread.sleep(2000) //todo
+//        Thread.sleep(2000) //todo
     }
 
     fun aaa() {
