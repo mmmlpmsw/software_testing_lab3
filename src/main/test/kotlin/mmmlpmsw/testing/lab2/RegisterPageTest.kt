@@ -78,13 +78,14 @@ class RegisterPageTest {
 
         registerPage.agree()
         registerPage.enterName("new_user_test")
-        registerPage.enterEmail("new_user_email@register.com")
+        registerPage.enterEmail("new_user_email${System.currentTimeMillis()}@register.com")
         registerPage.enterPassword("passworD123")
 
         FluentWait(driver)
             .pollingEvery(Duration.ofSeconds(2))
             .withTimeout(Duration.ofMinutes(10))
             .until {
+                !registerPage.isCaptchaWindowShowed()
                 CaptchaAnalyzer.isCaptchaSolved(
                     driver, registerPage.getCaptchaElement()
                 )

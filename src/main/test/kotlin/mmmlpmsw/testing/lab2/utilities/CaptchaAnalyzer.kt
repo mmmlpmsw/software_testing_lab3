@@ -1,31 +1,41 @@
 package mmmlpmsw.testing.lab2.utilities
 
-import org.openqa.selenium.OutputType
-import org.openqa.selenium.TakesScreenshot
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
+import org.openqa.selenium.*
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
 class CaptchaAnalyzer {
     companion object {
         fun isCaptchaSolved(driver: WebDriver, captchaElement: WebElement): Boolean {
-            val bytes = (driver as TakesScreenshot).getScreenshotAs(OutputType.BYTES) // Taking full screenshot so browser does not flicker
-            val image = ImageIO.read(ByteArrayInputStream(bytes))
-            val rawRgba = image.data.getPixels(
-                captchaElement.location.x,
-                captchaElement.location.y,
-                captchaElement.size.width,
-                captchaElement.size.height,
-                null as IntArray?
-            )
-            val greenBytes = rawRgba.withIndex().groupBy { it.index/4 }.filter {
-                val r = it.value[0].value
-                val g = it.value[1].value
-                val b = it.value[2].value
-                r < 10 && g > 150 && b < 90
-            }.count()
-            return greenBytes > 50
+            try {
+//                println("Checking captcha state")
+                val bytes = (driver as TakesScreenshot).getScreenshotAs(OutputType.BYTES) // Taking full screenshot so browser does not flicker
+                val image = ImageIO.read(ByteArrayInputStream(bytes))
+                val pageOffset = (driver as JavascriptExecutor).executeScript("return window.pageYOffset").toString().toDouble()
+                val scale = (driver as JavascriptExecutor).executeScript("return window.devicePixelRatio").toString().toDouble()
+                val x = (captchaElement.location.x*scale).toInt()
+                val y = ((captchaElement.location.y - pageOffset)*scale).toInt()
+                val w = (captchaElement.size.width*scale).toInt()
+                val h = (captchaElement.size.height*scale).toInt()
+
+                if (x + w >= image.width || y + h >= image.height) {
+//                    println("Element out of screen, screenshot no captured")
+                    return false
+                }
+//                ImageIO.write(image.getSubimage(x, y, w, h), "png", File("test.png")) // For debugging purposes
+                val rawRgba = image.data.getPixels(x, y, w, h, null as IntArray?)
+                val greenPixels = rawRgba.withIndex().groupBy { it.index / 4 }.filter {
+                    val r = it.value[0].value
+                    val g = it.value[1].value
+                    val b = it.value[2].value
+                    r < 45 && g > 150 && b < 95
+                }.count()
+//                println("Found $greenPixels green pixels")
+                return greenPixels > 0.0004*rawRgba.size
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return false
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
 
 import java.io.FileInputStream
@@ -37,11 +38,15 @@ class Test {
         fun provideWebDrivers(): Stream<WebDriver> {
             return Stream.of(
                     makeChromeDriver(),
-                    makeFirefoxDriver()
+//                    makeFirefoxDriver()
             )
         }
 
-        private fun makeChromeDriver()= ChromeDriver()
+        private fun makeChromeDriver(): ChromeDriver {
+            val o = ChromeOptions()
+            o.addArguments("--force-device-scale-factor=2")
+            return ChromeDriver(o)
+        }
 
         private fun makeFirefoxDriver() = FirefoxDriver()
     }
