@@ -199,6 +199,52 @@ class AuthUserTest {
 
     @ParameterizedTest
     @ProvideWebDrivers
+    fun cancelEditProfileTest(driver: WebDriver) {
+        this.driver = driver
+        driver.get("https://stackoverflow.com/users/login")
+        loginPage = LoginPage(driver)
+
+        loginPage.login()
+
+        if (Utils.waitForCaptchaIfExists(driver)) {
+            return
+        }
+
+        mainQuestionsPage = MainQuestionsPage(driver)
+
+        if (Utils.waitForCaptchaIfExists(driver)) {
+            return
+        }
+
+        mainQuestionsPage.openUserProfile()
+
+        userPage = CurrentUserPage(driver)
+
+        userPage.openEditProfile()
+        editProfilePage = EditProfilePage(driver)
+
+        Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.locationInputPath)).getAttribute("value") == "Saint Petersburg, Russia")
+        Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.titleInputPath)).getAttribute("value") == "aaaaa")
+
+//        editProfilePage.changeLocation("Saint Petersburg, Russia")
+//        editProfilePage.changeTitle("aaaaa")
+
+        editProfilePage.changeLocation("")
+        editProfilePage.changeTitle("")
+
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+        editProfilePage.cancelChanges()
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+
+        userPage.openEditProfile()
+
+        Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.locationInputPath)).getAttribute("value") == "Saint Petersburg, Russia")
+        Assertions.assertTrue(driver.findElement(By.xpath(editProfilePage.titleInputPath)).getAttribute("value") == "aaaaa")
+
+    }
+
+    @ParameterizedTest
+    @ProvideWebDrivers
     fun shareQuestionTest(driver: WebDriver) {
         this.driver = driver
         driver.get("https://stackoverflow.com/users/login")

@@ -22,10 +22,10 @@ class EditProfilePage(private val driver: WebDriver) {
     private val cancelEditProfileBtnPath = "//a[@class='s-btn' and @name='cancel']"
     private val successFieldPath = "//div[@class='val-message val-success']"
 
-    fun changeDisplayName(value: String) {
-        driver.findElement(By.xpath(displayNameInputPath)).clear()
-        driver.findElement(By.xpath(displayNameInputPath)).sendKeys(value)
-    }
+//    fun changeDisplayName(value: String) {
+//        driver.findElement(By.xpath(displayNameInputPath)).clear()
+//        driver.findElement(By.xpath(displayNameInputPath)).sendKeys(value)
+//    }
     fun changeLocation(value: String) {
         driver.findElement(By.xpath(locationInputPath)).clear()
         driver.findElement(By.xpath(locationInputPath)).sendKeys(value)
@@ -36,7 +36,7 @@ class EditProfilePage(private val driver: WebDriver) {
     }
     fun saveChanges() = driver.findElement(By.xpath(saveProfileBtnPath)).click()
 
-    fun cancelChanges() = driver.findElement(By.xpath(cancelEditProfileBtnPath)).click() //todo
+    fun cancelChanges() = driver.findElement(By.xpath(cancelEditProfileBtnPath)).click()
 
     fun isDone(): Boolean = driver.find(By.xpath(successFieldPath)) || driver.find(By.xpath("//div[@class='form-error']"))
 
