@@ -14,127 +14,139 @@ import java.util.*
 
 
 class LoginPageTest {
-    private lateinit var driver: WebDriver
+    private lateinit var drivers: List<WebDriver>
 
     private lateinit var loginPage: LoginPage
     private lateinit var githubAuthPage: GithubAuthPage
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testLoginWithWrongEmail(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/users/login")
-        loginPage = LoginPage(driver)
-        loginPage.enterEmail("aaaaaaaa")
-        loginPage.enterPassword("aaaaaaaa")
+    fun testLoginWithWrongEmail(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/users/login")
+            loginPage = LoginPage(driver)
+            loginPage.enterEmail("aaaaaaaa")
+            loginPage.enterPassword("aaaaaaaa")
 
-        loginPage.clickLoginButton()
+            loginPage.clickLoginButton()
 
-        Assertions.assertTrue(loginPage.isErrorAppear())
-    }
-
-    @ParameterizedTest
-    @ProvideWebDrivers
-    fun testLoginWithWrongPassword(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/users/login")
-        loginPage = LoginPage(driver)
-        loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
-        loginPage.enterPassword("help me please aaaaaaaaa")
-
-        loginPage.clickLoginButton()
-
-        Assertions.assertTrue(loginPage.isErrorAppear())
-    }
-
-    @ParameterizedTest
-    @ProvideWebDrivers
-    fun testLoginViaEmail(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/users/login")
-        loginPage = LoginPage(driver)
-        loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
-        loginPage.enterPassword("qwerty123")
-        loginPage.clickLoginButton()
-
-        if (Utils.waitForCaptchaIfExists(driver)) {
-            Assertions.assertNotEquals("https://stackoverflow.com/", driver.currentUrl)
-            return
+            Assertions.assertTrue(loginPage.isErrorAppear())
         }
-
-        loginPage.waitForUrl("https://stackoverflow.com/", 1)
-        Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
     }
-
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testLoginViaGoogle(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/users/login")
-        loginPage = LoginPage(driver)
-        loginPage.clickLoginViaGoogleButton()
+    fun testLoginWithWrongPassword(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/users/login")
+            loginPage = LoginPage(driver)
+            loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
+            loginPage.enterPassword("help me please aaaaaaaaa")
 
-        if (Utils.waitForCaptchaIfExists(driver)) {
-            return
+            loginPage.clickLoginButton()
+
+            Assertions.assertTrue(loginPage.isErrorAppear())
         }
+    }
 
-        Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
-        Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
+    @ParameterizedTest
+    @ProvideWebDrivers
+    fun testLoginViaEmail(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/users/login")
+            loginPage = LoginPage(driver)
+            loginPage.enterEmail("eevjaqmrffdlulceoi@niwghx.com")
+            loginPage.enterPassword("qwerty123")
+            loginPage.clickLoginButton()
 
+            if (Utils.waitForCaptchaIfExists(driver)) {
+                Assertions.assertNotEquals("https://stackoverflow.com/", driver.currentUrl)
+                return
+            }
+
+            loginPage.waitForUrl("https://stackoverflow.com/", 1)
+            Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
+        }
     }
 
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testLoginViaGithub(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/users/login")
-        loginPage = LoginPage(driver)
-        loginPage.clickLoginViaGithubButton()
+    fun testLoginViaGoogle(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/users/login")
+            loginPage = LoginPage(driver)
+            loginPage.clickLoginViaGoogleButton()
 
-        if (Utils.waitForCaptchaIfExists(driver)) {
-            return
+            if (Utils.waitForCaptchaIfExists(driver)) {
+                return
+            }
+
+            Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
+            Assertions.assertTrue(driver.currentUrl.startsWith("https://accounts.google.com/"))
         }
 
-        githubAuthPage = GithubAuthPage(driver)
-        Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
-        Assertions.assertTrue(githubAuthPage.isOnGithubAuth())
+    }
 
-        val props = Properties()
-        try {
-            props.load(FileInputStream("src/main/test/resources/github.properties"))
-        } catch (e: NullPointerException) {
-            fail("Props file not found")
+
+    @ParameterizedTest
+    @ProvideWebDrivers
+    fun testLoginViaGithub(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/users/login")
+            loginPage = LoginPage(driver)
+            loginPage.clickLoginViaGithubButton()
+
+            if (Utils.waitForCaptchaIfExists(driver)) {
+                return
+            }
+
+            githubAuthPage = GithubAuthPage(driver)
+            Assertions.assertNotEquals(loginPage.EXPECTED_PAGE_URL, driver.currentUrl)
+            Assertions.assertTrue(githubAuthPage.isOnGithubAuth())
+
+            val props = Properties()
+            try {
+                props.load(FileInputStream("src/main/test/resources/github.properties"))
+            } catch (e: NullPointerException) {
+                fail("Props file not found")
+            }
+
+            githubAuthPage.enterEmail(props.getProperty("github.email"))
+            githubAuthPage.enterPassword(props.getProperty("github.password"))
+
+            githubAuthPage.pressSignIn()
+            if (Utils.waitForCaptchaIfExists(driver)) {
+                return
+            }
+            Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
         }
-
-        githubAuthPage.enterEmail(props.getProperty("github.email"))
-        githubAuthPage.enterPassword(props.getProperty("github.password"))
-
-        githubAuthPage.pressSignIn()
-        if (Utils.waitForCaptchaIfExists(driver)) {
-            return
-        }
-        Assertions.assertEquals("https://stackoverflow.com/", driver.currentUrl)
     }
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testLoginViaFacebook(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/users/login")
-        loginPage = LoginPage(driver)
-        loginPage.clickLoginViaFacebookButton()
+    fun testLoginViaFacebook(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/users/login")
+            loginPage = LoginPage(driver)
+            loginPage.clickLoginViaFacebookButton()
 
-        if (Utils.waitForCaptchaIfExists(driver)) {
-            return
+            if (Utils.waitForCaptchaIfExists(driver)) {
+                return
+            }
+
+            Assertions.assertTrue(driver.currentUrl.startsWith("https://www.facebook.com/login.php?"))
         }
-
-        Assertions.assertTrue(driver.currentUrl.startsWith("https://www.facebook.com/login.php?"))
     }
 
     @AfterEach
     fun tearDown() {
-        driver.quit()
+        drivers.forEach(WebDriver::quit)
     }
 }

@@ -8,56 +8,64 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.openqa.selenium.WebDriver
 
 class LandingPageTest {
-    private lateinit var driver: WebDriver
+    private lateinit var drivers: List<WebDriver>
 
     private lateinit var landingPage: LandingPage
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testOpenSearch(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com")
-        landingPage = LandingPage(driver)
-        landingPage.clickSearchContentLink()
+    fun testOpenSearch(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach{ driver ->
+            driver.get("https://stackoverflow.com")
+            landingPage = LandingPage(driver)
+            landingPage.clickSearchContentLink()
 
-        assertEquals("https://stackoverflow.com/questions", driver.currentUrl)
+            assertEquals("https://stackoverflow.com/questions", driver.currentUrl)
+        }
     }
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testOpenDiscoverTeams(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com")
-        landingPage = LandingPage(driver)
-        landingPage.clickDiscoverTeamsContentLink()
+    fun testOpenDiscoverTeams(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com")
+            landingPage = LandingPage(driver)
+            landingPage.clickDiscoverTeamsContentLink()
 
-        assertEquals("https://stackoverflow.com/teams", driver.currentUrl)
+            assertEquals("https://stackoverflow.com/teams", driver.currentUrl)
+        }
     }
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testPressJoinCommunity(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com")
-        landingPage = LandingPage(driver)
-        landingPage.clickJoinCommunity()
+    fun testPressJoinCommunity(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com")
+            landingPage = LandingPage(driver)
+            landingPage.clickJoinCommunity()
 
-        assertEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
+            assertEquals("https://stackoverflow.com/users/signup", driver.currentUrl)
+        }
     }
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testPressCreateTeam(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com")
-        landingPage = LandingPage(driver)
-        landingPage.clickCreateTeam()
+    fun testPressCreateTeam(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com")
+            landingPage = LandingPage(driver)
+            landingPage.clickCreateTeam()
 
-        assertEquals("https://stackoverflow.com/teams/create/free", driver.currentUrl)
+            assertEquals("https://stackoverflow.com/teams/create/free", driver.currentUrl)
+        }
     }
 
     @AfterEach
     fun tearDown() {
-        driver.quit()
+        drivers.forEach(WebDriver::quit)
     }
 }

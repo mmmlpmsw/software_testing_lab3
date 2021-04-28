@@ -27,7 +27,6 @@ class AskQuestionPage(private val driver: WebDriver) {
     private val inputTitlePath = "//input[@name='title' and @type='text']"
     private val inputPostPath = "//textarea[@name='post-text' and contains(@class, 'js-post-body-field')]"
     private val inputTagPath = "//input[@class='s-input js-tageditor-replacing' and @type='text']"
-    private val inputErrorMsgPath = "//div[contains(@class, 'js-stacks-validation-message')]"
     private val previewPath = "//div[contains(@class, 'wmd-preview')]"
 
     private val strongBtnPath = "//li[@class='wmd-button' and @title='Strong <strong> Ctrl+B']"
@@ -43,6 +42,11 @@ class AskQuestionPage(private val driver: WebDriver) {
     private val hrBtnPath = "//li[@class='wmd-button' and @title='Horizontal Rule <hr> Ctrl+R']"
     private val undoBtnPath = "//li[@class='wmd-button' and @title='Undo - Ctrl+Z']"
     private val redoBtnPath = "//li[@class='wmd-button' and @title='Redo - Ctrl+Shift+Z']"
+
+    private val snippetWindowPath = "//div[@class='snippet-holder']"
+    private val snippetRunWindowPath = "//a[@class='grid--cell s-btn s-btn__primary s-btn__icon']"
+    private val snippetSaveWindowPath = "//a[@class='grid--cell s-btn s-btn__filled']"
+    private val snippetCancelWindowPath = "//a[@class='grid--cell mt-auto s-btn s-btn__filled']"
 
     fun clickBold() {
         driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS)
@@ -126,6 +130,21 @@ class AskQuestionPage(private val driver: WebDriver) {
     fun postQuestion() = driver.findElement(By.xpath("//button[@type='submit' and contains(@class, 'js-submit-button')]")).click()
     fun reviewQuestion() = driver.findElement(By.xpath("//button[@type='button' and @data-gps-track='askpage.review_click']")).click()
 
+//    fun writeSnippet(html: String, css: String, js: String) {
+//        driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS)
+//        Thread.sleep(2000)
+//        driver.findElement(By.xpath("$snippetWindowPath//div[@class='CodeMirror-scroll']//span[@role='presentation'][1]")).clear()
+//        driver.findElement(By.xpath("$snippetWindowPath//div[@class='CodeMirror-scroll']//span[@role='presentation'][2]")).clear()
+//        driver.findElement(By.xpath("$snippetWindowPath//div[@class='CodeMirror-scroll']//span[@role='presentation'][3]")).clear()
+//
+//
+//        driver.findElement(By.xpath("$snippetWindowPath//div[@class='CodeMirror-scroll']//span[@role='presentation'][1]")).sendKeys(html)
+//        driver.findElement(By.xpath("$snippetWindowPath//div[@class='CodeMirror-scroll']//span[@role='presentation'][2]")).sendKeys(css)
+//        driver.findElement(By.xpath("$snippetWindowPath//div[@class='CodeMirror-scroll']//span[@role='presentation'][3]")).sendKeys(js)
+//
+//        driver.findElement(By.xpath(snippetRunWindowPath)).click()
+//        driver.findElement(By.xpath(snippetSaveWindowPath)).click()
+//    }
 
     fun aaa() {
         println(driver.findElement(By.xpath(previewPath)).getAttribute("innerHTML"))

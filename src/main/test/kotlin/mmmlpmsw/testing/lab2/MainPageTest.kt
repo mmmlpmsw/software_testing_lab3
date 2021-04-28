@@ -10,11 +10,13 @@ import org.openqa.selenium.WebDriver
 
 
 class MainPageTest {
-    private lateinit var driver: WebDriver
+    private lateinit var drivers: List<WebDriver>
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testSearchUser(driver: WebDriver) {
+    fun testSearchUser(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach {  driver ->
         driver.get("https://stackoverflow.com/questions")
         val mainPage = MainQuestionsPage(driver)
         mainPage.clickUsersPageLink()
@@ -24,11 +26,11 @@ class MainPageTest {
 
         Assertions.assertTrue(usersPage.isUserPresented("josliber"))
 
-        driver.quit()
+        }
     }
 
     @AfterEach
     fun tearDown() {
-        driver.quit()
+        drivers.forEach(WebDriver::quit)
     }
 }

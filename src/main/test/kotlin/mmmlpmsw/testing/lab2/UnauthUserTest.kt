@@ -10,46 +10,49 @@ import org.openqa.selenium.WebDriver
 import java.util.concurrent.TimeUnit
 
 class UnauthUserTest {
-    private lateinit var driver: WebDriver
+    private lateinit var drivers: List<WebDriver>
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testAnswerQuestion1(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/questions")
-        val questionsPage = MainQuestionsPage(driver)
-        questionsPage.openQuestion()
+    fun testAnswerQuestion1(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/questions")
+            val questionsPage = MainQuestionsPage(driver)
+            questionsPage.openQuestion()
 
-        val questionPage = QuestionPage(driver)
-        questionPage.writeAnswerToQuestion("aaaaaa")
-        questionPage.clickToPostAnswer()
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
-        Assertions.assertFalse(questionPage.isAnswerValid())
-        Assertions.assertTrue(questionPage.areErrorsPresented())
+            val questionPage = QuestionPage(driver)
+            questionPage.writeAnswerToQuestion("aaaaaa")
+            questionPage.clickToPostAnswer()
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+            Assertions.assertFalse(questionPage.isAnswerValid())
+            Assertions.assertTrue(questionPage.areErrorsPresented())
+        }
     }
 
     @ParameterizedTest
     @ProvideWebDrivers
-    fun testAnswerQuestion2(driver: WebDriver) {
-        this.driver = driver
-        driver.get("https://stackoverflow.com/questions")
-        val questionsPage = MainQuestionsPage(driver)
-        questionsPage.openQuestion()
+    fun testAnswerQuestion2(drivers: List<WebDriver>) {
+        this.drivers = drivers
+        drivers.forEach { driver ->
+            driver.get("https://stackoverflow.com/questions")
+            val questionsPage = MainQuestionsPage(driver)
+            questionsPage.openQuestion()
 
-        val questionPage = QuestionPage(driver)
+            val questionPage = QuestionPage(driver)
 
-        questionPage.writeAnswerToQuestion("test test help me please aaaaaaaaaaaaaaaaaaaaaaa")
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+            questionPage.writeAnswerToQuestion("test test help me please aaaaaaaaaaaaaaaaaaaaaaa")
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
 
-        questionPage.dismiss()
-        questionPage.clickToPostAnswer()
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
+            questionPage.dismiss()
+            questionPage.clickToPostAnswer()
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
 
-        Assertions.assertTrue(questionPage.areErrorsPresented() || questionPage.isEmailNotPresentedToPost())
-    }
+            Assertions.assertTrue(questionPage.areErrorsPresented() || questionPage.isEmailNotPresentedToPost())
+        }}
 
     @AfterEach
     fun tearDown() {
-        driver.quit()
+        drivers.forEach(WebDriver::quit)
     }
 }

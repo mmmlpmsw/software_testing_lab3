@@ -36,14 +36,17 @@ class DriversUtils {
         }
 
         @JvmStatic
-        @Suppress("unused") // Used in @MethodSource-annotated testing functions
-        fun provideWebDrivers(): Stream<WebDriver> {
+        @Suppress("unused")
+        fun provideWebDrivers(): Stream<List<WebDriver>> {
             val browsers = props.getProperty("browsers").split(" ").map { it.strip() }
-            val builder = Stream.builder<WebDriver>()
+            val list = mutableListOf<WebDriver>()
+            val builder = Stream.builder<List<WebDriver>>()
             if (browsers.contains("chrome"))
-                builder.add(makeChromeDriver())
+                list.add(makeChromeDriver())
+//
             if (browsers.contains("firefox"))
-                builder.add(makeFirefoxDriver())
+                list.add(makeFirefoxDriver())
+            builder.add(list)
             return builder.build()
         }
 
